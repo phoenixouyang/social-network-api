@@ -12,7 +12,7 @@ module.exports = {
     }
   },
 
-  // get a singer user by _id
+  // get a single user by _id
   async getSingleUser(req, res) {
     try {
       const user = await Users.findOne({ _id: req.params.userId })
