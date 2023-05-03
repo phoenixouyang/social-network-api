@@ -73,8 +73,6 @@ module.exports = {
         return res.status(404).json({ message: 'Sorry, no user was found with that ID' })
       }
 
-      Thoughts.deleteMany({ userId: req.params.id })
-
       res.json({ message: 'User has been deleted'});
 
     } catch (err) {
@@ -86,9 +84,9 @@ module.exports = {
   // add a new friend to friend list
   async addFriend (req, res) {
     try {
-      const user = Users.findOneAndUpdate(
+      const user = await Users.findOneAndUpdate(
         { _id: req.params.userId },
-        { $push: { friends: req.params.friendId } },
+        { $addToSet: { friends: req.params.friendId } },
         { new: true },
       )
 
@@ -106,7 +104,7 @@ module.exports = {
   // remove a friend from friend list
   async deleteFriend (req, res) {
     try {
-      const user = Users.findOneAndUpdate(
+      const user = await Users.findOneAndUpdate(
         { _id: req.params.userId },
         { $pull: { friends: req.params.friendId } },
         { new: true },

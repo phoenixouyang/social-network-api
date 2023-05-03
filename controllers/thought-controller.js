@@ -87,17 +87,17 @@ module.exports = {
   // add a reaction to a thought
   async addReaction (req, res) {
     try {
-      const thought = Thoughts.findOneAndUpdate(
+      const thought = await Thoughts.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $push: { reactions: req.body } },
         { runValidators: true, new: true },
-      )
+      );
 
       if (!thought) {
         return res.status(404).json({ message: 'Sorry, no thought was found with that ID' })
       }
-      res.json(thought);
 
+      res.json(thought);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
@@ -107,7 +107,7 @@ module.exports = {
   // remove a reaction from a thought
   async deleteReaction (req, res) {
     try {
-      const thought = Thoughts.findOneAndUpdate(
+      const thought = await Thoughts.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $pull: { reactions: { reactionId: req.params.reactionId } } },
         { runValidators: true, new: true },
