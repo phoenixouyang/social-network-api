@@ -83,4 +83,43 @@ module.exports = {
     }
   },
 
-}
+  // add a new friend to friend list
+  async addFriend (req, res) {
+    try {
+      const user = Users.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $push: { friends: req.params.friendId } },
+        { new: true },
+      )
+
+      if (!user) {
+        return res.status(404).json({ message: 'Sorry, no user was found with that ID' })
+      }
+      res.json(user);
+
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+
+  // remove a friend from friend list
+  async deleteFriend (req, res) {
+    try {
+      const user = Users.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true },
+      )
+      
+      if (!user) {
+        return res.status(404).json({ message: 'Sorry, no user was found with that ID' })
+      }
+      res.json(user);
+
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+};
